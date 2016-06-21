@@ -1,0 +1,38 @@
+{
+    "name": "{name}",
+    "version": "1.0.0",
+    "description": "{name} Tool",
+    "author": {
+        "name": "",
+        "email": ""
+    },
+    "private": true,
+    "main": "build/index.js",
+    "scripts": {
+        "dev": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server --progress --colors --inline --hot --display-error-details --content-base src/",
+        "build": "rimraf ./build && cross-env NODE_ENV=production webpack -p"
+    },
+    "project-type": "umd",
+    "project-library": "{name}",
+    "dependencies": {},
+    "devDependencies": {
+        "autoprefixer": "*",
+        "babel-core": "*",
+        "babel-loader": "*",
+        "babel-plugin-add-module-exports": "*",
+        "babel-preset-es2015": "*",
+        "cross-env": "*",
+        "css-loader": "*",
+        "extract-text-webpack-plugin": "*",
+        "html-loader": "*",
+        "html-minify-loader": "*",
+        "less": "*",
+        "less-loader": "*",
+        "postcss-loader": "*",
+        "rimraf": "*",
+        "style-loader": "*",
+        "webpack": "*",
+        "webpack-dev-server": "*"
+    },
+    "license": "MIT"
+}

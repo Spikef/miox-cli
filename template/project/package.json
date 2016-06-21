@@ -1,0 +1,45 @@
+{
+  "name": "{name}",
+  "version": "1.0.0",
+  "description": "{name} project",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "private": true,
+  "main": "webpack.config.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server --progress --colors --inline --hot --display-error-details --content-base src/",
+    "build": "rimraf ./build && cross-env NODE_ENV=production webpack -p"
+  },
+  "project-type": "var",
+  "project-library": "{name}",
+  "dependencies": {},
+  "devDependencies": {
+    "autoprefixer": "*",
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-plugin-add-module-exports": "*",
+    "babel-preset-es2015": "*",
+    "cross-env": "*",
+    "css-loader": "*",
+    "extract-text-webpack-plugin": "*",
+    "html-loader": "*",
+    "html-minify-loader": "*",
+    "html-webpack-plugin": "*",
+    "less": "*",
+    "less-loader": "*",
+    "miox": "*",
+    "miox-components": "*",
+    "node-sass": "*",
+    "normalize.css": "*",
+    "postcss-loader": "*",
+    "rimraf": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "url-loader": "*",
+    "webpack": "*",
+    "webpack-dev-server": "*"
+  },
+  "license": "MIT"
+}
