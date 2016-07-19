@@ -111,11 +111,13 @@ create.install = function(target, dependencies) {
     if (list.length > 0) {
         console.log('');
         console.log(chalk.yellow('Failed to install some modules, try [npm install --save-dev] manually.'));
+    }else{
+        var packet = require(target + '/package.json');
+        packet.project.framework = 'miox';
+        packet.project.framework_version = packet.dependencies.miox.replace(/^\~/, '');
+        fs.writeFileSync(target + '/package.json', JSON.stringify(packet, null, 2), 'utf8');
+        console.log('- Project install success!');
     }
-    
-    // return new Promise(function (resolve, reject) {
-    //     resolve();
-    // });
 };
 
 function camelCase(input) {
