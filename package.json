@@ -1,7 +1,7 @@
 {
   "name": "miox-cli",
   "description": "The miox framework cli",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "author": {
     "name": "Spikef",
     "email": "Spikef@foxmail.com"

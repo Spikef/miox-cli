@@ -102,6 +102,8 @@ create.install = function(target, dependencies) {
     var result, list = [];
 
     Object.keys(dependencies).forEach(function (dependency) {
+        console.log('');
+        console.log(chalk.red('> npm install ' + dependency + ' --save-dev'));
         result = spawn('npm', ['install', dependency, '--save-dev'], { cwd: target, stdio: 'inherit'});
         if (result.status != 0) {
             list.push(dependency);
@@ -116,7 +118,6 @@ create.install = function(target, dependencies) {
         packet.project.framework = 'miox';
         packet.project.framework_version = packet.dependencies.miox.replace(/^\~/, '');
         fs.writeFileSync(target + '/package.json', JSON.stringify(packet, null, 2), 'utf8');
-        console.log('- Project install success!');
     }
 };
 

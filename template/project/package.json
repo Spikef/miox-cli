@@ -38,12 +38,13 @@
     "sass-loader": "*",
     "style-loader": "*",
     "url-loader": "*",
+    "file-loader": "*",
     "webpack": "*",
     "webpack-dev-server": "*"
   },
   "project": {
-    "framework": "miox",
-    "framework_version": "*",
+    "framework": "",
+    "framework_version": "",
     "https": true,
     "online": ""
   },
