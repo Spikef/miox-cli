@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "version": "1.0.0",
+  "description": "project",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "private": true,
+  "main": "webpack.config.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server --progress --colors --inline --hot --display-error-details --content-base src/",
+    "git": "git add . && git commit -am 'update new code' && git pull && git push",
+    "build": "rimraf ./build && cross-env NODE_ENV=production webpack -p"
+  },
+  "project-type": "var",
+  "project-library": "WebHook",
+  "license": "MIT"
+}

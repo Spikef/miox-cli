@@ -1,3 +1,5 @@
+"use strict";
+
 var fs = require('fs-extra');
 var path = require('path');
 var inquirer = require('inquirer');
@@ -5,66 +7,70 @@ var chalk = require('chalk');
 var spawn = require('child_process').spawnSync;
 var util = require('../lib/util');
 
-var create = module.exports = function(options) {
+var create = module.exports = function() {
     var questions = [
         {
             type: 'input',
             name: 'name',
             message: 'Project name',
             validate: function (val) {
-                return !val ? 'Project name cannot be empty' : fs.existsSync('./' + val) ? 'Project already exist' : true;
+                return !val
+                    ? 'Project name cannot be empty'
+                    : (fs.existsSync('./' + val) ? 'Project already exist' : true);
             }
         },
         {
-            type: 'confirm',
-            name: 'camel',
-            message: 'Camel case name',
-            default: false,
-            when: function (answers) {
-                return /\-[a-z]/i.test(answers.name);
-            }
+            type: 'list',
+            name: 'type',
+            message: 'Which kind of project do you choose?',
+            choices: [
+                "Miox@stable",
+                "Miox@next"
+            ]
         }
     ];
 
     inquirer
         .prompt(questions)
         .then(function (answers) {
-            create.makeProject(answers, options.noDependencies)
+            create.makeProject(answers);
         })
 };
 
-create.makeProject = function(options, noDependencies) {
+create.makeProject = function(options) {
     var target = path.resolve(process.cwd(), options.name);
+    var type = options.type;
 
     create
-        .copyProject(target)
+        .copyProject(target, type)
         .then(function() {
-            var name = options.name;
-            if (options.camel) name = camelCase(name);
-            return create.makePackage(target, name);
+            return create.makePackage(target, options.name, type);
         })
         .catch(function(err) {
             util.exit(err);
         })
-        .then(function(dependencies) {
-            if (!noDependencies) {
-                console.log('');
-                console.log(chalk.cyan('> npm install\n'));
-                console.log('------------------------------------------------------------');
-                console.log('');
-
-                return create.install(target, dependencies);
-            }
+        .then(function() {
+            return create.install(target, type, options.name);
         })
         .then(function () {
             console.log('');
-            console.log('Successfully create project %s', options.name);
+            console.log(chalk.green('Successfully create project %s', options.name));
+            console.log('Commands:');
+            console.log('------------------');
+            console.log('% cd '+ options.name);
+            console.log('------------------');
+            console.log('      npm run dev: 开启调试服务');
+            console.log('      npm run git: 自动提交代码');
+            console.log('    npm run build: 启动项目编译');
         });
 };
 
-create.copyProject = function(target) {
+create.copyProject = function(target, type) {
     return new Promise(function(resolve, reject){
-        var source = path.resolve(__dirname, '../template/project');
+        var source = path.resolve(__dirname, '../template', type);
+        if ( !fs.existsSync(source) ){
+            return reject(new Error('can not find source dir'));
+        }
         fs.copy(source, target, function(err){
             if (err) {
                 reject(err)
@@ -75,13 +81,15 @@ create.copyProject = function(target) {
     });
 };
 
-create.makePackage = function(target, name) {
-    var packet = require('../template/project/package.json');
+create.makePackage = function(target, name, type) {
+    var packet = require('../template/' + type + '/package.json');
     packet.name = name;
     packet.description = name + ' project';
-    packet['project-library'] = name;
-
-    var dependencies = packet.devDependencies;
+    packet.project = {
+        framework: 'miox',
+        framework_version: '0.0.1',
+        online: ''
+    };
     
     return new Promise(function(resolve, reject){
         fs.writeFile(
@@ -91,38 +99,60 @@ create.makePackage = function(target, name) {
                 if (err) {
                     reject(err)
                 } else {
-                    resolve(dependencies);
+                    resolve();
                 }
             }
         )
     });
 };
 
-create.install = function(target, dependencies) {
-    var result, list = [];
+create.install = function(target, type, name) {
+    return new Promise(function(resolve, reject){
+        var result, list = [];
+        var deps = require('../template/' + type + '/deps');
 
-    Object.keys(dependencies).forEach(function (dependency) {
-        console.log('');
-        console.log(chalk.red('> npm install ' + dependency + ' --save-dev'));
-        result = spawn('npm', ['install', dependency, '--save-dev'], { cwd: target, stdio: 'inherit'});
-        if (result.status != 0) {
-            list.push(dependency);
+        if ( !deps.scss ){
+            deps.scss = function(target, fn){
+                fn();
+            }
         }
-    });
 
-    if (list.length > 0) {
+        if ( !deps.packages ){
+            deps.packages = function(a, fn){
+                fn();
+            }
+        }
+
+        deps.devDependencies.forEach(function (dependency) {
+            console.log('');
+            console.log(chalk.red('% npm install --save-dev ' + dependency));
+            result = spawn('npm', ['install', dependency, '--save-dev'], { cwd: target, stdio: 'inherit'});
+            if (result.status != 0) {
+                list.push(dependency);
+            }
+        });
+        deps.dependencies.forEach(function (dependency) {
+            console.log('');
+            console.log(chalk.red('% npm install --save ' + dependency));
+            result = spawn('npm', ['install', dependency, '--save'], { cwd: target, stdio: 'inherit'});
+            if (result.status != 0) {
+                list.push(dependency);
+            }
+        });
+
         console.log('');
-        console.log(chalk.yellow('Failed to install some modules, try [npm install --save-dev] manually.'));
-    }else{
-        var packet = require(target + '/package.json');
-        packet.project.framework = 'miox';
-        packet.project.framework_version = packet.dependencies.miox.replace(/^\~/, '');
-        fs.writeFileSync(target + '/package.json', JSON.stringify(packet, null, 2), 'utf8');
-    }
+        console.log(chalk.blue('% Try load package.json, then catch miox version writting.'));
+        setTimeout(function(){
+            var packages = fs.readFileSync(target + '/package.json', 'utf8');
+            var packet = JSON.parse(packages);
+            packet.project.framework_version = packet.dependencies.miox.replace(/^[\~\^\=\-\@\>\<]/, '');
+            deps.scss(target, function(){
+                deps.packages(packet, function(){
+                    fs.writeFileSync(target + '/package.json', JSON.stringify(packet, null, 2), 'utf8');
+                    fs.unlinkSync(target + '/deps.js');
+                    resolve();
+                });
+            });
+        }, 3000);
+    });
 };
-
-function camelCase(input) {
-    return input.replace(/\-([a-z])/ig, function($0, $1){
-        return $1.toUpperCase();
-    })
-}

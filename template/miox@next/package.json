@@ -1,0 +1,13 @@
+{
+  "name": "",
+  "version": "0.0.1",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development node_modules/.bin/webpack-dev-server --config ./webpack.config.js --host 0.0.0.0 --port 8080 --progress --colors --inline --hot --display-error-details --content-base src/",
+    "git": "git add . && git commit -am 'update new code' && git pull && git push",
+    "build": "rimraf ./build/ && NODE_ENV=production webpack --config ./webpack.config.js -p"
+  },
+  "author": "沈赟杰",
+  "license": "MIT"
+}
