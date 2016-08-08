@@ -37,7 +37,7 @@ result.module.loaders = [
     { test: /\.js$/, exclude: /node_modules/, loader: "babel" },
     { test: /\.css$/, loader: ExtractTextPlugin.extract("style", "css!postcss") },
     { test: /\.scss$/, loader: ExtractTextPlugin.extract("style", "css!postcss!sass")  },
-    { test: /\.(png|gif)$/, loader: ExtractTextPlugin.extract("file", "url?limit=1&name=img/[name]-[hash].[ext]!image-webpack") },
+    { test: /\.(png|gif)$/, loader: "url?limit=1&name=img/[name]-[hash].[ext]!image-webpack" },
     { test: /\.json$/, loader: "json" }
 ];
 

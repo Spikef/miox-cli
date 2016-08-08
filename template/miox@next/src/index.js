@@ -14,11 +14,9 @@ import Router from './router';
 /**
  * 程序启动闭包
  */
-(async () => {
-    const app = await Bootstrap();
-    app.engine(Engine);
+Bootstrap(async app => {
+    const engine = app.engine(Engine);
     plugin(MioxVueComponents);
     app.animate(MioxAnimate({ effect: 'slide' }));
     app.use(Router.routes());
-    await app.listen();
-})().catch(console.error);
+}).catch(console.error);
