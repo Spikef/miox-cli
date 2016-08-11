@@ -1,5 +1,5 @@
 {
-  "name": "miox-cli",
+  "name": "@u51/miox-cli",
   "description": "The miox framework cli",
   "version": "1.0.9",
   "author": {
@@ -21,7 +21,7 @@
     "template"
   ],
   "bin": {
-    "mi": "./bin/index.js"
+    "miox": "./bin/index.js"
   },
   "dependencies": {
     "chalk": "^1.1.3",

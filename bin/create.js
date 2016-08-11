@@ -59,9 +59,9 @@ create.makeProject = function(options) {
             console.log('------------------');
             console.log('% cd '+ options.name);
             console.log('------------------');
-            console.log('      npm run dev: 开启调试服务');
-            console.log('      npm run git: 自动提交代码');
-            console.log('    npm run build: 启动项目编译');
+            console.log('      nbm run dev: 开启调试服务');
+            console.log('      nbm run git: 自动提交代码');
+            console.log('    nbm run build: 启动项目编译');
         });
 };
 
@@ -125,16 +125,16 @@ create.install = function(target, type, name) {
 
         deps.devDependencies.forEach(function (dependency) {
             console.log('');
-            console.log(chalk.red('% npm install --save-dev ' + dependency));
-            result = spawn('npm', ['install', dependency, '--save-dev'], { cwd: target, stdio: 'inherit'});
+            console.log(chalk.red('% nbm install --save-dev ' + dependency));
+            result = spawn('nbm', ['install', dependency, '--save-dev'], { cwd: target, stdio: 'inherit'});
             if (result.status != 0) {
                 list.push(dependency);
             }
         });
         deps.dependencies.forEach(function (dependency) {
             console.log('');
-            console.log(chalk.red('% npm install --save ' + dependency));
-            result = spawn('npm', ['install', dependency, '--save'], { cwd: target, stdio: 'inherit'});
+            console.log(chalk.red('% nbm install --save ' + dependency));
+            result = spawn('nbm', ['install', dependency, '--save'], { cwd: target, stdio: 'inherit'});
             if (result.status != 0) {
                 list.push(dependency);
             }
