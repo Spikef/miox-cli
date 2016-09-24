@@ -1,25 +1,22 @@
-import './resource'; // 加载资源文件
+/**
+ * Created by evio on 16/7/25.
+ */
+'use strict';
 
-// load miox and miox-components
-import * as miox from 'miox';
-import mioxs from 'miox-components';
+import 'normalize.css';
+import './index.scss';
+import { Bootstrap } from 'miox';
+import MioxAnimate from 'miox-animate';
+import MioxVueComponents from 'miox-vue-components';
+import { Engine, plugin } from 'miox-vue-engine';
+import Router from './router';
 
-// import webviews.
-import IndexWebviewPage from './js/webviews/index';
-
-// install native components on miox.
-mioxs(miox);
-
-// when dom ready
-// start to build app
-miox.ready(function(){
-    const app = miox.bootstrap({
-        backgroundColor: '#eee',
-        debug: true,
-        animate:'drown'     //  slide|fade|scale|drown
-    })
-
-    app.define('/', IndexWebviewPage);
-
-    app.listen();
-});
+/**
+ * 程序启动闭包
+ */
+Bootstrap(async app => {
+    const engine = app.engine(Engine);
+    plugin(MioxVueComponents);
+    app.animate(MioxAnimate({ effect: 'slide' }));
+    app.use(Router.routes());
+}).catch(console.error);

@@ -1,19 +1,13 @@
 {
   "name": "",
-  "version": "1.0.0",
-  "description": "project",
-  "author": {
-    "name": "",
-    "email": ""
-  },
-  "private": true,
-  "main": "webpack.config.js",
+  "version": "0.0.1",
+  "description": "",
+  "main": "build/index.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev node_modules/.bin/webpack-dev-server --progress --colors --inline --hot --display-error-details --content-base src/",
+    "dev": "NODE_ENV=development node_modules/.bin/webpack-dev-server --config ./webpack.config.js --host 0.0.0.0 --port 8080 --progress --colors --inline --hot --display-error-details --content-base src/",
     "git": "git add . && git commit -am 'update new code' && git pull && git push",
-    "build": "rimraf ./build && cross-env NODE_ENV=production webpack -p"
+    "build": "rimraf ./build/ && NODE_ENV=production webpack --config ./webpack.config.js -p"
   },
-  "project-type": "var",
-  "project-library": "WebHook",
+  "author": "沈赟杰",
   "license": "MIT"
 }

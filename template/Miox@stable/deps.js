@@ -6,12 +6,11 @@
 var fs = require('fs-extra');
 var path = require('path');
 
-exports.devDependencies = ["autoprefixer", "babel-core", "babel-loader", "babel-plugin-add-module-exports", "babel-preset-es2015", "cross-env", "css-loader", "extract-text-webpack-plugin", "html-loader", "html-minify-loader", "html-webpack-plugin", "less", "less-loader", "node-sass", "normalize.css", "postcss-loader", "rimraf", "sass-loader", "style-loader", "url-loader", "file-loader", "webpack", "webpack-dev-server"];
-exports.dependencies = ["miox", "miox-components"];
-
+exports.devDependencies = ["autoprefixer", "babel-core", "babel-loader", "babel-plugin-add-module-exports", "babel-polyfill", "babel-preset-es2015", "babel-preset-stage-0", "css-loader", "extract-text-webpack-plugin", "file-loader", "html-webpack-plugin", "image-webpack-loader", "json-loader", "node-sass", "postcss-loader", "rimraf", "sass-loader", "style-loader", "url-loader", "webpack", "webpack-dev-server"];
+exports.dependencies = ["miox@next", "miox-animate", "miox-router", "miox-vue-components", "miox-vue-engine", "normalize.css"];
 exports.scss = function(where, fn){
-    var source = path.resolve(where, 'node_modules', 'miox', 'src', 'css');
-    var target = path.resolve(where, 'src', 'css', 'scss');
+    var source = path.resolve(where, 'node_modules', 'miox', 'src', 'scss');
+    var target = path.resolve(where, 'src', 'scss');
     fs.copy(source, target, function(err){
         if (err) { throw err; }
         fn();
