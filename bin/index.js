@@ -12,6 +12,6 @@ app
     .command('create')
     .alias('c')
     .describe('Create a new project with miox.')
-    .use('./create');
+    .use('../lib/create');
 
 app.listen();
